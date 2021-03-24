@@ -1,0 +1,300 @@
+%% Graphs for Lab HT14C
+% By group A1
+
+
+%% Load tables for each trial
+
+% Exercise A - Combined Radiation and Natural Convection
+A1 = readmatrix('Raw Data.xlsx','Sheet','1','Range','A2:H128'); % 4.5V
+A2 = readmatrix('Raw Data.xlsx','Sheet','2','Range','A2:H86'); % 9V
+A3 = readmatrix('Raw Data.xlsx','Sheet','3','Range','A2:H93'); % 13.5V
+A4 = readmatrix('Raw Data.xlsx','Sheet','4','Range','A2:H65'); % 18V
+
+% Exercise B - Combined Radiation and Forced Convection
+B1 = readmatrix('Raw Data.xlsx','Sheet','5','Range','A2:H102'); % 4.5V, 0.5 m/s
+B2 = readmatrix('Raw Data.xlsx','Sheet','6','Range','A2:H48'); % 4.5V, 1 m/s
+B3 = readmatrix('Raw Data.xlsx','Sheet','7','Range','A2:H60'); % 4.5V, 2 m/s
+B4 = readmatrix('Raw Data.xlsx','Sheet','8','Range','A2:H45'); % 4.5V, 3 m/s
+B5 = readmatrix('Raw Data.xlsx','Sheet','9','Range','A2:H36'); % 4.5V, 4 m/s
+B6 = readmatrix('Raw Data.xlsx','Sheet','10','Range','A2:H48'); % 4.5V, 5 m/s
+B7 = readmatrix('Raw Data.xlsx','Sheet','11','Range','A2:H30'); % 4.5V, 6 m/s
+B8 = readmatrix('Raw Data.xlsx','Sheet','12','Range','A2:H31'); % 4.5V, 7 m/s
+B9 = readmatrix('Raw Data.xlsx','Sheet','13','Range','A2:H102'); % 18V, 0.5 m/s
+B10 = readmatrix('Raw Data.xlsx','Sheet','14','Range','A2:H79'); % 18V, 1 m/s
+B11 = readmatrix('Raw Data.xlsx','Sheet','15','Range','A2:H65'); % 18V, 2 m/s
+B12 = readmatrix('Raw Data.xlsx','Sheet','16','Range','A2:H52'); % 18V, 3 m/s
+B13 = readmatrix('Raw Data.xlsx','Sheet','17','Range','A2:H48'); % 18V, 4 m/s
+B14 = readmatrix('Raw Data.xlsx','Sheet','18','Range','A2:H45'); % 18V, 5 m/s
+B15 = readmatrix('Raw Data.xlsx','Sheet','19','Range','A2:H40'); % 18V, 6 m/s
+B16 = readmatrix('Raw Data.xlsx','Sheet','20','Range','A2:H49'); % 18V, 7 m/s
+
+
+%% Exercise A #2 - Figure 1: Cylinder Temperature vs Time
+
+figure('Name','Cylinder Temperature vs Time')
+plot((1:length(A1(:,1))).*10,A1(:,4), 'm') % temperature plots
+hold on
+plot((1:length(A2(:,1))).*10,A2(:,4), 'b')
+plot((1:length(A3(:,1))).*10,A3(:,4), 'g')
+plot((1:length(A4(:,1))).*10,A4(:,4), 'r')
+plot(1200,81.5,'k.','MarkerSize',15) % steady state points
+plot(800,202,'k.','MarkerSize',15,'HandleVisibility','off')
+plot(730,324,'k.','MarkerSize',15,'HandleVisibility','off')
+plot(520,440,'k.','MarkerSize',15,'HandleVisibility','off')
+
+for i=1:length(A1) % error bars
+    if mod(i,5)==0
+        errorbar(i.*10,A1(i,4),2.2,'m')
+    end
+end
+for i=1:length(A2)
+    if mod(i,5)==0
+        errorbar(i.*10,A2(i,4),2.2,'b')
+    end
+end
+for i=1:length(A3)
+    if mod(i,5)==0
+        errorbar(i.*10,A3(i,4),2.2,'g')
+    end
+end
+for i=1:length(A4)
+    if mod(i,5)==0
+        errorbar(i.*10,A4(i,4),2.2,'r')
+    end
+end
+
+title('Cylinder Temperature vs Time');
+xlabel('Time (s)');
+ylabel('Temperature (Celsius)');
+legend('4.5V','9V','13.5V','18V','Steady State Points')
+hold off
+
+%% Exercise A #5 - Figure 2: h_free vs Heater Temperature
+h_free = [11.270 14.348	16.334	17.707];
+heaterTemp = [81.81666667 202.1285714 324.5555556 440.1909091];
+
+figure('Name','Natural Convection Heat Transfer Coefficient vs Heater Temperature')
+errorbar(heaterTemp,h_free,[2.257	2.873	3.271	3.546], 'r.-','MarkerSize',10)
+title('h_{free} vs Heater Temperature');
+xlabel('Temperature (Celsius)');
+ylabel('h_{free} (W/m^2*K)');
+
+%% Exercise A #6 - Figure 3: q's vs Heater Temperature
+q_A = [0.6043345453	1.764453577	3.348392535	4.697597904; % q_free
+    0.9835328379	5.142428889	14.21532996	29.76647774; % q_rad
+    1.587867383	6.906882466	17.5637225	34.46407564; % q_total
+    3.08	13.65	28.14	50.4]; % q_elec
+
+figure('Name', 'Heat Transfer Modes vs Surface Temperature')
+errorbar(heaterTemp, q_A(1,:),[0.3078	1.142	2.180	3.264],'.-','MarkerSize',10)
+hold on
+errorbar(heaterTemp, q_A(2,:),[0.06287	0.2057	0.5255	1.126],'.-','MarkerSize',10)
+errorbar(heaterTemp, q_A(3,:),[2.778	11.96	27.25	49.29],'.-','MarkerSize',10)
+errorbar(heaterTemp, q_A(4,:),[0.2228	0.4611	0.6782	0.9108],'.-','MarkerSize',10)
+title('q_{free}, q_{rad}, q_{total}, q_{elec} vs Surface Temperature');
+xlabel('Surface Temperature (Celsius)');
+ylabel('q (W)');
+legend('q_{free}', 'q_{rad}', 'q_{total}', 'q_{elec}','Location','Northwest');
+hold off
+
+%% Exercise B #2 - Figure 4: Cylinder Temperature vs Time
+
+% at 4.5V
+figure('Name','Cylinder Temperature at 4.5V vs Time')
+plot((1:length(B1(:,1))).*10,B1(:,4),'r') % temperature plots
+hold on
+plot((1:length(B2(:,1))).*10,B2(:,4),'Color',[0.8500, 0.3250, 0.0980])
+plot((1:length(B3(:,1))).*10,B3(:,4),'Color',[0.9290, 0.6940, 0.1250])
+plot((1:length(B4(:,1))).*10,B4(:,4),'g')
+plot((1:length(B5(:,1))).*10,B5(:,4),'b')
+plot((1:length(B6(:,1))).*10,B6(:,4),'m')
+plot((1:length(B7(:,1))).*10,B7(:,4),'k')
+plot((1:length(B8(:,1))).*10,B8(:,4),'Color',[0.4940, 0.1840, 0.5560])
+
+plot(950,56.9,'k.','MarkerSize',15) % steady state points
+plot(450,49,'k.','MarkerSize',15,'HandleVisibility','off')
+plot(550,42,'k.','MarkerSize',15,'HandleVisibility','off')
+plot(350,38.6,'k.','MarkerSize',15,'HandleVisibility','off')
+plot(300,36.6,'k.','MarkerSize',15)
+plot(350,34.9,'k.','MarkerSize',15,'HandleVisibility','off')
+plot(200,33.8,'k.','MarkerSize',15,'HandleVisibility','off')
+plot(200,33,'k.','MarkerSize',15,'HandleVisibility','off')
+
+for i=1:length(B1) % error bars
+    if mod(i,5)==0
+        errorbar(i.*10,B1(i,4),2.2,'r')
+    end
+end
+for i=1:length(B2)
+    if mod(i,5)==0
+        errorbar(i.*10,B2(i,4),2.2,'Color',[0.8500, 0.3250, 0.0980])
+    end
+end
+for i=1:length(B3)
+    if mod(i,5)==0
+        errorbar(i.*10,B3(i,4),2.2,'Color',[0.9290, 0.6940, 0.1250])
+    end
+end
+for i=1:length(B4)
+    if mod(i,5)==0
+        errorbar(i.*10,B4(i,4),2.2,'g')
+    end
+end
+for i=1:length(B5)
+    if mod(i,5)==0
+        errorbar(i.*10,B5(i,4),2.2,'b')
+    end
+end
+for i=1:length(B6)
+    if mod(i,5)==0
+        errorbar(i.*10,B6(i,4),2.2,'m')
+    end
+end
+for i=1:length(B7)
+    if mod(i,5)==0
+        errorbar(i.*10,B7(i,4),2.2,'k')
+    end
+end
+for i=1:length(B8)
+    if mod(i,5)==0
+        errorbar(i.*10,B8(i,4),2.2,'Color',[0.4940, 0.1840, 0.5560])
+    end
+end
+title('Cylinder Temperature vs Time at 4.5V');
+xlabel('Time (s)');
+ylabel('Temperature (Celsius)');
+legend('0.5 m/s','1 m/s','2 m/s','3 m/s','4 m/s', '5 m/s', '6 m/s', '7 m/s','Steady State Points')
+hold off
+
+% at 18V
+figure('Name','Cylinder Temperature at 18V vs Time')
+plot((1:length(B9(:,1))).*10,B9(:,4),'r') % temperature plots
+hold on
+plot((1:length(B10(:,1))).*10,B10(:,4),'Color',[0.8500, 0.3250, 0.0980])
+plot((1:length(B11(:,1))).*10,B11(:,4),'Color',[0.9290, 0.6940, 0.1250])
+plot((1:length(B12(:,1))).*10,B12(:,4),'g')
+plot((1:length(B13(:,1))).*10,B13(:,4),'b')
+plot((1:length(B14(:,1))).*10,B14(:,4),'m')
+plot((1:length(B15(:,1))).*10,B15(:,4),'k')
+plot((1:length(B16(:,1))).*10,B16(:,4),'Color',[0.4940, 0.1840, 0.5560])
+
+plot(800,382.1,'k.','MarkerSize',15) % steady state points
+plot(750,349.7,'k.','MarkerSize',15,'HandleVisibility','off')
+plot(600,292.2,'k.','MarkerSize',15,'HandleVisibility','off')
+plot(500,255.9,'k.','MarkerSize',15,'HandleVisibility','off')
+plot(450,229.7,'k.','MarkerSize',15)
+plot(400,210.2,'k.','MarkerSize',15,'HandleVisibility','off')
+plot(350,195.4,'k.','MarkerSize',15,'HandleVisibility','off')
+plot(400,183.2,'k.','MarkerSize',15,'HandleVisibility','off')
+
+for i=1:length(B9) % error bars
+    if mod(i,5)==0
+        errorbar(i.*10,B9(i,4),2.2,'r')
+    end
+end
+for i=1:length(B10)
+    if mod(i,5)==0
+        errorbar(i.*10,B10(i,4),2.2,'Color',[0.8500, 0.3250, 0.0980])
+    end
+end
+for i=1:length(B11)
+    if mod(i,5)==0
+        errorbar(i.*10,B11(i,4),2.2,'Color',[0.9290, 0.6940, 0.1250])
+    end
+end
+for i=1:length(B12)
+    if mod(i,5)==0
+        errorbar(i.*10,B12(i,4),2.2,'g')
+    end
+end
+for i=1:length(B13)
+    if mod(i,5)==0
+        errorbar(i.*10,B13(i,4),2.2,'b')
+    end
+end
+for i=1:length(B14)
+    if mod(i,5)==0
+        errorbar(i.*10,B14(i,4),2.2,'m')
+    end
+end
+for i=1:length(B15)
+    if mod(i,5)==0
+        errorbar(i.*10,B15(i,4),2.2,'k')
+    end
+end
+for i=1:length(B16)
+    if mod(i,5)==0
+        errorbar(i.*10,B16(i,4),2.2,'Color',[0.4940, 0.1840, 0.5560])
+    end
+end
+title('Cylinder Temperature vs Time at 18V');
+xlabel('Time (s)');
+ylabel('Temperature (Celsius)');
+legend('0.5 m/s','1 m/s','2 m/s','3 m/s','4 m/s', '5 m/s', '6 m/s', '7 m/s','Steady State Points','Location','southeast')
+hold off
+
+%% Exercise B #5 - Figure 5: Surface Temperature of the Cylinder, Ts, vs Air Velocity
+Ts = [56.83	49.06 42.05	38.53 36.475 34.90 33.80 33.031; % 4.5V
+    382.55	349.7125 292.3125 255.9285714 229.6888889 210.2 195.4 183.2]; % 18V
+
+Uc = [0.6434	1.27	2.45	3.69	4.90	6.12	7.33	8.54; % 4.5 V
+    0.6392	1.171	2.447	3.647	4.879	6.104	7.313	8.538]; % 18V
+
+figure('Name','Surface Temperature vs Air Velocity')
+errorbar(Uc(1,:),Ts(1,:),[2.2	2.2	2.2	2.2	2.2	2.2	2.2	2.2],'b.-','MarkerSize',10)
+hold on
+errorbar(Uc(2,:),Ts(2,:),[2.716875 2.47059375 2.2	2.2	2.2	2.2	2.2	2.2],'r.-','MarkerSize',10)
+title('Cylinder Temperature vs Air Velocity');
+xlabel('Velocity (m/s)');
+ylabel('Temperature (Celsius)');
+legend('4.5V','18V')
+hold off
+
+%% Exercise B #6 - Figure 6: h_conv vs corrected air velocity
+h_conv = [26.21213626 36.05430044	48.88641054	59.12751935	67.50411537	74.87648308	83.31724253	91.58984632; % 4.5V
+    26.1422725	34.65985164	48.86257314	67.39382494	74.81009385	74.80850927	83.22178923	91.577777]; % 18V
+
+figure('Name','h_conv vs Air Velocity')
+errorbar(Uc(1,:),h_conv(1,:),[5.248976196	7.219868037	9.789496081	11.84027652	13.51768857	14.99400405	16.68426482	18.34085243],'b.-','MarkerSize',10)
+hold on 
+errorbar(Uc(2,:),h_conv(2,:),[5.234985988	6.940629881	9.784722646	13.49560293	14.98070962	14.98039231	16.66515031	18.33843555],'ro-')
+title('h_{conv} vs Air Velocity');
+xlabel('Velocity (m/s)');
+ylabel('h_{conv} (W/m^2*K)');
+legend('4.5V','18V')
+hold off
+
+%% Exercise B #7 - Figure 7: qconv, qrad, qtotal, and qelec vs corrected air velocity
+q_B1 = [2.04250129	2.155488621	2.164112523	2.157167943	2.148803662	2.124139625	2.163454811	2.220230585; % q_conv
+    0.5128604184	0.3793543643	0.2712730755	0.2196685112	0.1897463207	0.1677632662	0.1527023921	0.1420137102; % q_rad
+    2.555361708	2.534842985	2.435385598	2.376836454	2.338549982	2.291902891	2.316157204	2.362244295; % q_total
+    3.08	3.08	3.08	3.08	3.08	3.08	3.08	3.08]; % q_elec
+
+q_B2 = [20.68887587	24.9233125	29.00328859	34.63380297	34.15169134	30.95714048	31.72735439	32.46407606; % q_conv
+    20.98928817	16.92105461	11.20690311	8.379973388	6.672887206	5.56625606	4.809823501	4.238510702; % q_rad
+    41.67816403	41.84436711	40.21019171	43.01377636	40.82457854	36.52339654	36.5371779	36.70258676; % q_total
+    50.4	50.4	50.4	50.4	50.4	50.4	50.4	50.4]; % q_elec
+
+figure('Name', 'Heat Transfer Modes vs Corrected Air Velocity at 4.5V')
+errorbar(Uc(1,:), q_B1(1,:),[0.4470791636	0.497631815	0.5478688472	0.5922314666	0.6316226998	0.6662204764	0.7163346974	0.7686854803],'.-','MarkerSize',10)
+hold on
+errorbar(Uc(1,:), q_B1(2,:),[0.04900674006	0.04572228748	0.0431701608	0.04203175502	0.04141634373	0.04096123606	0.04065326013	0.04044588189],'.-','MarkerSize',10)
+errorbar(Uc(1,:), q_B1(3,:),[0.4960859037	0.5433541025	0.591039008	0.6342632216	0.6730390435	0.7071817124	0.7569879575	0.8091313622],'.-','MarkerSize',10)
+errorbar(Uc(1,:), q_B1(4,:),[0.4455	0.4455	0.4455	0.4455	0.4455	0.4455	0.4455	0.4455],'.-','MarkerSize',10)
+title('q_{conv}, q_{rad}, q_{total}, q_{elec} vs Surface Temperature');
+xlabel('Corrected Air Velocity (m/s)');
+ylabel('q (W)');
+legend('q_{conv}', 'q_{rad}', 'q_{total}', 'q_{elec}','Location','best');
+hold off
+
+figure('Name', 'Heat Transfer Modes vs Corrected Air Velocity at 18V')
+errorbar(Uc(2,:), q_B2(1,:),[4.153077849	5.003592907	5.824890941	6.959524691	6.866670436	6.228112846	6.386908807	6.539280118],'.-','MarkerSize',10)
+hold on
+errorbar(Uc(2,:), q_B2(2,:),[0.7853129749	0.6288815281	0.4175029955	0.3189842567	0.259292261	0.2205308626	0.1940298319	0.1740146258],'.-','MarkerSize',10)
+errorbar(Uc(2,:), q_B2(3,:),[4.938390824	5.632474435	6.242393936	7.278508948	7.125962697	6.448643708	6.580938639	6.713294744],'.-','MarkerSize',10)
+errorbar(Uc(2,:), q_B2(4,:),[1.8216	1.8216	1.8216	1.8216	1.8216	1.8216	1.8216	1.8216],'.-','MarkerSize',10)
+title('q_{conv}, q_{rad}, q_{total}, q_{elec} vs Surface Temperature');
+xlabel('Corrected Air Velocity (m/s)');
+ylabel('q (W)');
+legend('q_{conv}', 'q_{rad}', 'q_{total}', 'q_{elec}','Location','best');
+hold off
